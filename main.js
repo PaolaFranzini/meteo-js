@@ -6,6 +6,11 @@ document.querySelector('#search-button').addEventListener('click', searchTerm);
 let daysDisplayed = [];
 let weatherOnDate = [];
 
+let cityName = document.querySelector('#city-name').textContent;
+let country = document.querySelector('#country').textContent;
+let daySelection = document.querySelector('#day-selection');
+let forecastContainer = document.querySelector('#forecast-container');
+
 function searchTerm() {
   let cityToSearch = document.querySelector('#search-field').value;
   if (cityToSearch) {
@@ -32,6 +37,11 @@ function searchWeather(searchCity) {
 function initializeAll(resultFromServer) {
   console.log(resultFromServer);
 
+  weatherOnDate = [];
+  
+  daySelection.innerHTML = '';
+  forecastContainer.innerHTML = '';
+
   displayInfoCity(resultFromServer.city);
   displayDays(resultFromServer.list);
   splitWeatherOnDate(resultFromServer.list);
@@ -40,14 +50,12 @@ function initializeAll(resultFromServer) {
 }
 
 function displayInfoCity(city) {
-  document.querySelector('#city-name').textContent = city.name;
-  document.querySelector('#country').textContent = city.country;
+  cityName.textContent = city.name;
+  country.textContent = city.country;
 }
 
 function displayDays(list) {
-  daysDisplayed.push(list[0].dt_txt.slice(0, 10));
-
-  for (i = 1; i < list.length; i++) {
+  for (i = 0; i < list.length; i++) {
     let alreadyIn = false;
     for (j = 0; j < daysDisplayed.length; j++) {
       if (list[i].dt_txt.slice(0, 10) === daysDisplayed[j]) {
@@ -58,8 +66,6 @@ function displayDays(list) {
       daysDisplayed.push(list[i].dt_txt.slice(0, 10));
     }
   }
-
-  let daySelection = document.querySelector('#day-selection');
 
   for (i = 0; i < daysDisplayed.length; i++) {
     let newDay = document.createElement('div');
@@ -78,7 +84,6 @@ function displayDays(list) {
     nameWeekDate.appendChild(myDay);
 
     daySelection.appendChild(newDay);
-
   }
 }
 
@@ -108,6 +113,7 @@ function dateToWeekday(stringDate) {
 }
 
 function splitWeatherOnDate(list) {
+
   console.log(list);
   let arrayForToday = [];
   for (i = 0; i <= list.length; i++) {
@@ -127,31 +133,29 @@ function splitWeatherOnDate(list) {
   }
 }
 
-function activateDate(){
+function activateDate() {
   let listDays = document.querySelectorAll('.days');
   for (i = 0; i < listDays.length; i++) {
     listDays[i].addEventListener('click', updateInfoDate);
   }
   initializeToday();
-};
+}
 
 function initializeToday() {
   let listDays = document.querySelectorAll('.days');
   listDays[0].classList.add('active');
-
-  let forecastContainer = document.querySelector('#forecast-container');
-  let childrenForecastContainer = forecastContainer.childNodes;
 
   let hourRow = document.createElement('div');
   hourRow.setAttribute('class', 'hour-row');
   forecastContainer.appendChild(hourRow);
 
   for (i = 0; i < weatherOnDate[0].length; i++) {
-
     let time = document.createElement('p');
     time.setAttribute('class', 'time');
     hourRow.appendChild(time);
-    let myTime = document.createTextNode(weatherOnDate[0][i].dt_txt.slice(11, 16));
+    let myTime = document.createTextNode(
+      weatherOnDate[0][i].dt_txt.slice(11, 16)
+    );
     time.appendChild(myTime);
 
     let icon = document.createElement('p');
@@ -163,27 +167,34 @@ function initializeToday() {
     let description = document.createElement('p');
     description.setAttribute('class', 'description');
     hourRow.appendChild(description);
-    let myDescription = document.createTextNode(weatherOnDate[0][i].weather[0].description);
+    let myDescription = document.createTextNode(
+      weatherOnDate[0][i].weather[0].description
+    );
     description.appendChild(myDescription);
 
     let temperature = document.createElement('p');
     temperature.setAttribute('class', 'temperature');
     hourRow.appendChild(temperature);
-    let myTemperature = document.createTextNode(Number(weatherOnDate[0][i].main.temp).toFixed(1) + '°');
+    let myTemperature = document.createTextNode(
+      Number(weatherOnDate[0][i].main.temp).toFixed(1) + '°'
+    );
     temperature.appendChild(myTemperature);
 
     let wind = document.createElement('p');
     wind.setAttribute('class', 'wind');
     hourRow.appendChild(wind);
-    let myWind = document.createTextNode(weatherOnDate[0][i].wind.speed + 'm/s');
+    let myWind = document.createTextNode(
+      weatherOnDate[0][i].wind.speed + 'm/s'
+    );
     wind.appendChild(myWind);
 
     let humidity = document.createElement('p');
     humidity.setAttribute('class', 'humidity');
     hourRow.appendChild(humidity);
-    let myHumidity = document.createTextNode(weatherOnDate[0][i].main.humidity + '%');
+    let myHumidity = document.createTextNode(
+      weatherOnDate[0][i].main.humidity + '%'
+    );
     humidity.appendChild(myHumidity);
-
   }
 }
 
@@ -192,7 +203,10 @@ function updateInfoDate() {
   console.log(number);
   let index = 0;
 
-  while (number !== daysDisplayed[index].slice(8) && index < daysDisplayed.length ) {
+  while (
+    number !== daysDisplayed[index].slice(8) &&
+    index < daysDisplayed.length
+  ) {
     index++;
   }
 
@@ -204,7 +218,6 @@ function updateInfoDate() {
 
   listDays[index].classList.add('active');
 
-  let forecastContainer = document.querySelector('#forecast-container');
   let childrenForecastContainer = forecastContainer.childNodes;
 
   for (i = 0; i < childrenForecastContainer.length; i++) {
@@ -216,42 +229,52 @@ function updateInfoDate() {
   forecastContainer.appendChild(hourRow);
 
   for (i = 0; i < weatherOnDate[index].length; i++) {
-
     let time = document.createElement('p');
     time.setAttribute('class', 'time');
     hourRow.appendChild(time);
-    let myTime = document.createTextNode(weatherOnDate[index][i].dt_txt.slice(11, 16));
+    let myTime = document.createTextNode(
+      weatherOnDate[index][i].dt_txt.slice(11, 16)
+    );
     time.appendChild(myTime);
 
     let icon = document.createElement('p');
     icon.setAttribute('class', 'icon');
     hourRow.appendChild(icon);
-    let myIcon = document.createTextNode(weatherOnDate[index][i].weather[0].icon);
+    let myIcon = document.createTextNode(
+      weatherOnDate[index][i].weather[0].icon
+    );
     icon.appendChild(myIcon);
 
     let description = document.createElement('p');
     description.setAttribute('class', 'description');
     hourRow.appendChild(description);
-    let myDescription = document.createTextNode(weatherOnDate[index][i].weather[0].description);
+    let myDescription = document.createTextNode(
+      weatherOnDate[index][i].weather[0].description
+    );
     description.appendChild(myDescription);
 
     let temperature = document.createElement('p');
     temperature.setAttribute('class', 'temperature');
     hourRow.appendChild(temperature);
-    let myTemperature = document.createTextNode(Number(weatherOnDate[index][i].main.temp).toFixed(1) + '°');
+    let myTemperature = document.createTextNode(
+      Number(weatherOnDate[index][i].main.temp).toFixed(1) + '°'
+    );
     temperature.appendChild(myTemperature);
 
     let wind = document.createElement('p');
     wind.setAttribute('class', 'wind');
     hourRow.appendChild(wind);
-    let myWind = document.createTextNode(weatherOnDate[index][i].wind.speed + 'm/s');
+    let myWind = document.createTextNode(
+      weatherOnDate[index][i].wind.speed + 'm/s'
+    );
     wind.appendChild(myWind);
 
     let humidity = document.createElement('p');
     humidity.setAttribute('class', 'humidity');
     hourRow.appendChild(humidity);
-    let myHumidity = document.createTextNode(weatherOnDate[index][i].main.humidity + '%');
+    let myHumidity = document.createTextNode(
+      weatherOnDate[index][i].main.humidity + '%'
+    );
     humidity.appendChild(myHumidity);
-
   }
 }
