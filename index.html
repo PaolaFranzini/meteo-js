@@ -1,29 +1,43 @@
 <html lang="it">
-<head>
-  <meta charset="utf-8">
-  <title>Previsioni Meteo con Javascript</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0,
+         maximum-scale=1.0"
+    />
+    <title>Previsioni Meteo con Javascript</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Josefin+Sans|Playfair+Display&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <div id="intro-container">
+      <div id="intro-text">
+        <h1 id="main-title">Il meteo nel mondo</h1>
+        <h2>Inserisci il nome di una città:</h2>
+      </div>
 
-  <div id="search-container">
-    <input type="text" id="search-field" placeholder="City Name">
-    <button id="search-button">Search</button>
-  </div>
-
-  <div class="weather-info-container">
-    <div class="info-city">
-      <div id="city-name"></div>
-      <div id="country"></div>
+      <div id="search-container">
+        <input type="text" id="search-field" placeholder="Nome della città" />
+        <a id="search-button">Cerca</a>
+      </div>
     </div>
+    <div class="weather-info-container">
+      <div id="info-city">
+        <h3 id="city-name"></h3>
+        <span id="country"></span>
+      </div>
 
-    <div class="info-weather">
-      <div id="day-selection"></div>
-      <div id="forecast-container"></div>
+      <div class="info-weather">
+        <div id="day-selection"></div>
+        <div id="forecast-container">
+        </div>
+      </div>
     </div>
-
-  </div>
-  <script src="main.js"></script>
-</body>
+    <script src="main.js"></script>
+  </body>
 </html>
