@@ -28,9 +28,16 @@ html {
 
 body {
   min-height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   background-image: url('img/bg-clouds.jpg');
   background-size: cover;
   background-position: center center;
@@ -44,7 +51,9 @@ body {
 }
 
 body.weather-displayed {
-  justify-content: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 #intro-text p {
@@ -73,10 +82,19 @@ INTRO CONTAINER SENZA PREVISIONI METEO
 ==============================================================*/
 
 #intro-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 #intro-text {
@@ -100,6 +118,7 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   font-size: 1rem;
   border: 3px solid var(--light-clr);
   background-color: var(--light-clr);
+  -webkit-transition: border 0.3s ease-in-out;
   transition: border 0.3s ease-in-out;
   margin-bottom: 15px;
 }
@@ -113,17 +132,20 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   display: inline-block;
   padding: 15px 30px;
   border-radius: 20px;
-  box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
   font-size: 1.3rem;
   background-color: var(--primary-clr);
   border: 3px solid var(--primary-clr);
   overflow: visible;
+  -webkit-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
 #search-button:focus {
   outline: none;
-  box-shadow: 0 0 0 10px var(--light-clr), 0 0 0 18px var(--primary-clr);
+  -webkit-box-shadow: 0 0 0 10px var(--light-clr), 0 0 0 18px var(--primary-clr);
+          box-shadow: 0 0 0 10px var(--light-clr), 0 0 0 18px var(--primary-clr);
 }
 
 #search-button:hover {
@@ -153,7 +175,9 @@ body.weather-displayed::before {
   z-index: -1;
 }
 .weather-displayed #intro-container {
-  order: 1;
+  -webkit-box-ordinal-group: 2;
+      -ms-flex-order: 1;
+          order: 1;
 }
 
 .weather-displayed #intro-text {
@@ -161,6 +185,8 @@ body.weather-displayed::before {
 }
 
 .weather-displayed #search-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   max-width: 90vw;
   margin-bottom: 2em;
@@ -202,8 +228,11 @@ DAY SELECTION
 ==============================================================*/
 
 #day-selection {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   font-size: 1rem;
   margin-bottom: 20px;
 }
@@ -214,8 +243,10 @@ DAY SELECTION
   margin: 0 2px;
   background-color: var(--primary-clr);
   text-align: center;
-  flex-basis: 50px;
+  -ms-flex-preferred-size: 50px;
+      flex-basis: 50px;
   border: 3px solid var(--primary-clr);
+  -webkit-transition: .3s ease-in-out;
   transition: .3s ease-in-out;
 }
 
@@ -226,19 +257,33 @@ DAY SELECTION
 
 .days.active {
   background-color: var(--light-clr);
-  flex-basis: 60px;
-  animation: day-active 0.5s;
+  -ms-flex-preferred-size: 60px;
+      flex-basis: 60px;
+  -webkit-animation: day-active 0.5s;
+          animation: day-active 0.5s;
   border: 3px solid var(--light-clr);
 }
 
 .days.active .day-detail.number {
-  transform: scale(1.7) translateY(2px);
-  animation: day-num 0.3s;
+  -webkit-transform: scale(1.7) translateY(2px);
+          transform: scale(1.7) translateY(2px);
+  -webkit-animation: day-num 0.3s;
+          animation: day-num 0.3s;
 }
 
 .days.active .day-detail.weekday {
-  transform: translateY(5px);
+  -webkit-transform: translateY(5px);
+          transform: translateY(5px);
   text-transform: uppercase;
+}
+
+@-webkit-keyframes day-active {
+  0% {
+    background-color: var(--primary-clr);
+  }
+  100% {
+    background-color: var(--light-clr);
+  }
 }
 
 @keyframes day-active {
@@ -250,12 +295,25 @@ DAY SELECTION
   }
 }
 
-@keyframes day-num {
+@-webkit-keyframes day-num {
   0% {
-    transform: scale(1) translateY(0);
+    -webkit-transform: scale(1) translateY(0);
+            transform: scale(1) translateY(0);
   }
   100% {
-    transform: scale(1.7) translateY(2px);
+    -webkit-transform: scale(1.7) translateY(2px);
+            transform: scale(1.7) translateY(2px);
+  }
+}
+
+@keyframes day-num {
+  0% {
+    -webkit-transform: scale(1) translateY(0);
+            transform: scale(1) translateY(0);
+  }
+  100% {
+    -webkit-transform: scale(1.7) translateY(2px);
+            transform: scale(1.7) translateY(2px);
   }
 }
 
@@ -295,7 +353,8 @@ FORECAST
 }
 
 .weather-detail {
-  animation: data-forecast 0.4s ease-in-out;
+  -webkit-animation: data-forecast 0.4s ease-in-out;
+          animation: data-forecast 0.4s ease-in-out;
   vertical-align: middle;
 }
 
@@ -314,7 +373,8 @@ FORECAST
 }
 
 .description-container {
-  transform: translateY(-7px);
+  -webkit-transform: translateY(-7px);
+          transform: translateY(-7px);
 }
 
 .time {
@@ -324,6 +384,16 @@ FORECAST
 .vento-unit {
   font-size: 0.7rem;
   font-style: italic;
+}
+
+@-webkit-keyframes data-forecast {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes data-forecast {
@@ -366,11 +436,13 @@ TABLET
 
   .days {
     font-size: 1.2rem;
-    flex-basis: 120px;
+    -ms-flex-preferred-size: 120px;
+        flex-basis: 120px;
   }
 
   .days.active {
-    flex-basis: 160px;
+    -ms-flex-preferred-size: 160px;
+        flex-basis: 160px;
   }
 
   #day-selection {
