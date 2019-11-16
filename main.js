@@ -6,6 +6,7 @@ document.querySelector('#search-button').addEventListener('click', searchTerm);
 let daysDisplayed = [];
 let weatherOnDate = [];
 
+let searchContainer = document.querySelector('#search-container');
 let cityName = document.querySelector('#city-name').textContent;
 let country = document.querySelector('#country').textContent;
 let daySelection = document.querySelector('#day-selection');
@@ -31,6 +32,15 @@ function searchWeather(searchCity) {
     })
     .then(result => {
       initializeAll(result);
+    })
+    .catch(() => {
+      let searchError = document.createElement('p');
+      searchError.setAttribute('id', 'search-error');
+      searchContainer.appendChild(searchError);
+      let myError = document.createTextNode(
+        `Result not found for "${searchCity}". Please check the spelling.`
+      );
+      searchError.appendChild(myError);
     });
 }
 
@@ -38,7 +48,12 @@ function initializeAll(resultFromServer) {
   console.log(resultFromServer);
 
   weatherOnDate = [];
-  
+
+  let searchError = document.querySelector('#search-error');
+  if (searchError) {
+    searchContainer.removeChild(searchError);
+  }
+
   daySelection.innerHTML = '';
   forecastContainer.innerHTML = '';
 
@@ -113,7 +128,6 @@ function dateToWeekday(stringDate) {
 }
 
 function splitWeatherOnDate(list) {
-
   console.log(list);
   let arrayForToday = [];
   for (i = 0; i <= list.length; i++) {
