@@ -22,29 +22,56 @@ DOCUMENT SETUP
   padding: 0;
 }
 
+button,
+input {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  outline: none;
+  background: transparent;
+
+  color: inherit;
+  font: inherit;
+
+  line-height: normal;
+
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  -webkit-appearance: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
 html {
   height: 100%;
 }
 
 body {
-  min-height: 100%;
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   background-image: url('img/bg-clouds.jpg');
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
   padding: 0 15px;
 
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
+  color: #263237;
   color: var(--dark-clr);
   font-size: 18px;
   line-height: 1.3;
@@ -52,8 +79,8 @@ body {
 
 body.weather-displayed {
   -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
 }
 
 #intro-text p {
@@ -73,7 +100,8 @@ h2 {
 }
 
 input {
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
+  color: #263237;
   color: var(--dark-clr);
 }
 
@@ -87,14 +115,14 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
 #intro-text {
@@ -114,17 +142,22 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   padding: 15px 30px;
   border-radius: 20px;
   width: 80vw;
+  height: 60px;
   text-align: center;
   font-size: 1rem;
+  border: 3px solid #faf9f4;
   border: 3px solid var(--light-clr);
+  background-color: #faf9f4;
   background-color: var(--light-clr);
   -webkit-transition: border 0.3s ease-in-out;
   transition: border 0.3s ease-in-out;
   margin-bottom: 15px;
+  vertical-align: middle;
 }
 
 #search-field:focus {
   outline: none;
+  border: 3px solid #f6ba85;
   border: 3px solid var(--primary-clr);
 }
 
@@ -133,24 +166,44 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   padding: 15px 30px;
   border-radius: 20px;
   -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
-          box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
   font-size: 1.3rem;
+  background-color: #f6ba85;
   background-color: var(--primary-clr);
+  border: 3px solid #f6ba85;
   border: 3px solid var(--primary-clr);
   overflow: visible;
   -webkit-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-#search-button:focus {
-  outline: none;
-  -webkit-box-shadow: 0 0 0 10px var(--light-clr), 0 0 0 18px var(--primary-clr);
-          box-shadow: 0 0 0 10px var(--light-clr), 0 0 0 18px var(--primary-clr);
-}
-
-#search-button:hover {
+  height: 60px;
+  vertical-align: middle;
   cursor: pointer;
+}
+
+#location {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  background-color: var(--secondary-clr);
+  cursor: pointer;
+  color: var(--light-clr);
+  -webkit-transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  border: 3px solid var(--secondary-clr);
+}
+
+#search-button:focus,
+#search-button:hover {
   background-color: var(--light-clr);
+}
+
+#location:hover {
+  background-color: var(--light-clr);
+  color: var(--dark-clr);
 }
 
 #search-error {
@@ -161,9 +214,18 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   margin-bottom: 5px;
 }
 
+.weather-info-container {
+  display: none;
+}
+
 /*============================================================
 INTRO CONTAINER CON PREVISIONI METEO
 ==============================================================*/
+
+body.weather-displayed .weather-info-container {
+  display: block;
+}
+
 body.weather-displayed::before {
   content: '';
   position: fixed;
@@ -176,8 +238,8 @@ body.weather-displayed::before {
 }
 .weather-displayed #intro-container {
   -webkit-box-ordinal-group: 2;
-      -ms-flex-order: 1;
-          order: 1;
+  -ms-flex-order: 1;
+  order: 1;
 }
 
 .weather-displayed #intro-text {
@@ -185,9 +247,6 @@ body.weather-displayed::before {
 }
 
 .weather-displayed #search-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   max-width: 90vw;
   margin-bottom: 2em;
 }
@@ -197,19 +256,21 @@ body.weather-displayed::before {
   border-radius: 20px 0 0 20px;
   text-align: left;
   margin-bottom: 0;
+  width: 185px;
 }
 
 .weather-displayed #search-button {
   padding: 10px 20px;
   border-radius: 0 20px 20px 0;
   font-size: 1.2rem;
+  margin-left: -6px;
 }
 
 /*============================================================
 INFO CITY
 ==============================================================*/
 #info-city {
-  margin-bottom: 30px;
+  margin: 0 0 30px 20px;
   font-family: 'Playfair Display', serif;
 }
 
@@ -220,7 +281,11 @@ INFO CITY
 
 #city-name {
   font-size: 3rem;
-  margin: 20px 5px 0 20px;
+  margin: 20px 5px 5px 0;
+}
+
+#local-time {
+  font-size: 1.5rem;
 }
 
 /*============================================================
@@ -232,7 +297,7 @@ DAY SELECTION
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
   font-size: 1rem;
   margin-bottom: 20px;
 }
@@ -244,10 +309,14 @@ DAY SELECTION
   background-color: var(--primary-clr);
   text-align: center;
   -ms-flex-preferred-size: 50px;
-      flex-basis: 50px;
+  flex-basis: 50px;
   border: 3px solid var(--primary-clr);
-  -webkit-transition: .3s ease-in-out;
-  transition: .3s ease-in-out;
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+
+.days:focus {
+  outline: none;
 }
 
 .days:hover {
@@ -255,25 +324,26 @@ DAY SELECTION
   background-color: var(--light-clr);
 }
 
-.days.active {
+.days.active,
+.days:focus {
   background-color: var(--light-clr);
   -ms-flex-preferred-size: 60px;
-      flex-basis: 60px;
+  flex-basis: 60px;
   -webkit-animation: day-active 0.5s;
-          animation: day-active 0.5s;
-  border: 3px solid var(--light-clr);
+  animation: day-active 0.5s;
+  border: 3px solid var(--primary-clr);
 }
 
 .days.active .day-detail.number {
-  -webkit-transform: scale(1.7) translateY(2px);
-          transform: scale(1.7) translateY(2px);
+  -webkit-transform: scale(1.7) translateY(-1px);
+  transform: scale(1.7) translateY(-1px);
   -webkit-animation: day-num 0.3s;
-          animation: day-num 0.3s;
+  animation: day-num 0.3s;
 }
 
 .days.active .day-detail.weekday {
-  -webkit-transform: translateY(5px);
-          transform: translateY(5px);
+  -webkit-transform: translateY(2px);
+  transform: translateY(2px);
   text-transform: uppercase;
 }
 
@@ -298,22 +368,22 @@ DAY SELECTION
 @-webkit-keyframes day-num {
   0% {
     -webkit-transform: scale(1) translateY(0);
-            transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
   }
   100% {
-    -webkit-transform: scale(1.7) translateY(2px);
-            transform: scale(1.7) translateY(2px);
+    -webkit-transform: scale(1.7) translateY(2-1px);
+    transform: scale(1.7) translateY(-1px);
   }
 }
 
 @keyframes day-num {
   0% {
     -webkit-transform: scale(1) translateY(0);
-            transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
   }
   100% {
-    -webkit-transform: scale(1.7) translateY(2px);
-            transform: scale(1.7) translateY(2px);
+    -webkit-transform: scale(1.7) translateY(-1px);
+    transform: scale(1.7) translateY(-1px);
   }
 }
 
@@ -322,6 +392,7 @@ FORECAST
 ==============================================================*/
 
 #forecast-container {
+  background-color: #9abdd0;
   background-color: var(--secondary-clr);
   padding: 0 3px;
   margin-bottom: 60px;
@@ -336,12 +407,16 @@ FORECAST
 }
 
 .title-row {
+  color: #faf9f4;
   color: var(--light-clr);
+  padding: 10px 0;
 }
 
 .hour-row {
+  background-color: #faf9f4;
   background-color: var(--light-clr-trans);
   padding: 8px 0 10px;
+  border-bottom: 2px solid #f6ba85;
   border-bottom: 2px solid var(--secondary-clr);
 }
 
@@ -354,7 +429,7 @@ FORECAST
 
 .weather-detail {
   -webkit-animation: data-forecast 0.4s ease-in-out;
-          animation: data-forecast 0.4s ease-in-out;
+  animation: data-forecast 0.4s ease-in-out;
   vertical-align: middle;
 }
 
@@ -374,7 +449,7 @@ FORECAST
 
 .description-container {
   -webkit-transform: translateY(-7px);
-          transform: translateY(-7px);
+  transform: translateY(-7px);
 }
 
 .time {
@@ -437,12 +512,13 @@ TABLET
   .days {
     font-size: 1.2rem;
     -ms-flex-preferred-size: 120px;
-        flex-basis: 120px;
+    flex-basis: 120px;
   }
 
-  .days.active {
+  .days.active,
+  .days:focus {
     -ms-flex-preferred-size: 160px;
-        flex-basis: 160px;
+    flex-basis: 160px;
   }
 
   #day-selection {

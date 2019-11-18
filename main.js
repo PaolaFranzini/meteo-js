@@ -6,21 +6,29 @@ let weatherOnDate = [];
 let body = document.querySelector('body');
 let mainTitle = document.querySelector('#main-title');
 let introText = document.querySelector('#intro-text');
+let searchText = document.querySelector('#search-text');
 let searchField = document.querySelector('#search-field');
 let searchButton = document.querySelector('#search-button');
+let locationButton = document.querySelector('#location');
 let searchContainer = document.querySelector('#search-container');
 let cityName = document.querySelector('#city-name');
 let country = document.querySelector('#country');
+let localTime = document.querySelector('#local-time');
+let clockDisplayed;
 let daySelection = document.querySelector('#day-selection');
 let forecastContainer = document.querySelector('#forecast-container');
 
+let timezone;
+
 searchField.focus();
 searchButton.addEventListener('click', searchTerm);
+locationButton.addEventListener('click', searchLocation);
 
 searchField.addEventListener('keyup', function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     searchButton.click();
+    searchButton.blur();
     searchField.blur();
   }
 });
@@ -28,19 +36,36 @@ searchField.addEventListener('keyup', function(event) {
 function searchTerm() {
   let cityToSearch = document.querySelector('#search-field').value;
   if (cityToSearch) {
-    searchWeather(cityToSearch);
+    searchWeather('q=' + cityToSearch);
   }
   document.querySelector('#search-field').value = '';
 }
 
-function searchWeather(searchCity) {
-  if (introText.childNodes[1] === mainTitle) {
-    introText.removeChild(mainTitle);
-  }
+function searchLocation() {
+  navigator.geolocation.getCurrentPosition(successLocation, errorLocation);
+}
 
+function successLocation(pos) {
+  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+
+  let stringLocation = 'lat=' + crd.latitude + '&&lon=' + crd.longitude;
+
+  searchWeather(stringLocation);
+}
+
+function errorLocation(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+function searchWeather(stringToSearch) {
+  searchButton.blur();
   let url =
-    'https://api.openweathermap.org/data/2.5/forecast?q=' +
-    searchCity +
+    'https://api.openweathermap.org/data/2.5/forecast?' +
+    stringToSearch +
     '&lang=it&units=metric&APPID=' +
     myApiKey;
   console.log(url);
@@ -61,9 +86,8 @@ function searchWeather(searchCity) {
 
       let notFound = document.createElement('p');
       searchErrorContainer.appendChild(notFound);
-      let myNotFound = document.createTextNode(
-        `Non ho trovato la città "${searchCity}".`
-      );
+      let string = 'Non ho trovato la città ' + stringToSearch.slice(2);
+      let myNotFound = document.createTextNode(string);
       notFound.appendChild(myNotFound);
 
       let checkSpelling = document.createElement('p');
@@ -72,10 +96,19 @@ function searchWeather(searchCity) {
         'Per favore, controlla di aver scritto correttamente e fai una nuova ricerca'
       );
       checkSpelling.appendChild(myCheck);
+
+      searchText.textContent = 'Inserisci il nome di una città:';
+      mainTitle.style.display = 'block';
+
+      clearInterval(clockDisplayed);
+      localTime.innerHTML = '';
     });
 }
 
 function initializeAll(resultFromServer) {
+  searchText.textContent = "Inserisci il nome di un'altra città:";
+  mainTitle.style.display = 'none';
+
   console.log(resultFromServer);
 
   body.classList.add('weather-displayed');
@@ -90,10 +123,13 @@ function initializeAll(resultFromServer) {
   forecastContainer.innerHTML = '';
   cityName.textContent = '';
   country.textContent = '';
+  localTime.textContent = '';
 
   displayInfoCity(resultFromServer.city);
-  displayDays(resultFromServer.list);
-  splitWeatherOnDate(resultFromServer.list);
+  let convertedResults = convertToLocalTime(resultFromServer.list, timezone);
+  console.log(convertedResults);
+  displayDays(convertedResults);
+  splitWeatherOnDate(convertedResults);
   console.log(weatherOnDate);
   activateDate();
 }
@@ -101,6 +137,17 @@ function initializeAll(resultFromServer) {
 function displayInfoCity(city) {
   cityName.textContent = city.name;
   country.textContent = city.country;
+
+  timezone = city.timezone;
+  console.log(timezone);
+  displayLocalTime();
+  clockDisplayed = setInterval(displayLocalTime, 1000);
+}
+
+function displayLocalTime() {
+  let myTime = new Date().getTime() + timezone * 1000;
+  let myDate = new Date(myTime);
+  localTime.textContent = myDate.toISOString().slice(11, 19);
 }
 
 function displayDays(list) {
@@ -117,7 +164,7 @@ function displayDays(list) {
   }
 
   for (i = 0; i < daysDisplayed.length; i++) {
-    let newDay = document.createElement('a');
+    let newDay = document.createElement('button');
     newDay.setAttribute('class', 'days');
 
     let numberDate = document.createElement('p');
@@ -426,4 +473,133 @@ function updateInfoDate() {
     );
     humidity.appendChild(myHumidity);
   }
+}
+
+function convertToLocalTime(list, offset) {
+  console.log(list);
+
+  let hToAdd = Math.floor(offset / 3600);
+  let mToAdd = Math.floor((offset % 3600) / 60);
+
+  console.log('ore da aggiungere' + hToAdd);
+  console.log(mToAdd);
+
+  for (i = 0; i < list.length; i++) {
+    let string = list[i].dt_txt;
+
+    console.log(string);
+    let year = Number(string.slice(0, 4));
+    let month = Number(string.slice(5, 7));
+    let day = Number(string.slice(8, 10));
+    let hour = Number(string.slice(11, 13));
+    let min = Number(string.slice(14, 16));
+
+    if (min + mToAdd < 0) {
+      min += 60 + mToAdd;
+      hour--;
+    } else if (min + mToAdd >= 60) {
+      min += mToAdd;
+      min %= 60;
+      hour++;
+    } else {
+      min += mToAdd;
+    }
+
+    console.log(hour + hToAdd);
+
+    if (hour + hToAdd < 0) {
+      hour += 24 + hToAdd;
+      day--;
+    } else if (hour + hToAdd >= 24) {
+      hour += hToAdd;
+      hour %= 24;
+      day++;
+    } else {
+      hour += hToAdd;
+    }
+
+    let numberDays = countDaysInMonth(month);
+
+    console.log(countDaysInMonth(month));
+
+    if (day >= numberDays) {
+      day %= numberDays;
+      month++;
+    } else if (day <= 0) {
+      month--;
+      if ((month = 1)) {
+        day = 31;
+        month = 12;
+        year--;
+      } else {
+        day = countDaysInMonth(month);
+      }
+    }
+
+    if (month >= 12) {
+      month %= 12;
+      year++;
+    }
+
+    let minToString;
+    let hourToString;
+    let dayToString;
+    let monthToString;
+
+    if (min < 10) {
+      minToString = '0' + min;
+    } else {
+      minToString = min.toString();
+    }
+
+    if (hour < 10) {
+      hourToString = '0' + hour;
+    } else {
+      hourToString = hour.toString();
+    }
+
+    if (day < 10) {
+      dayToString = '0' + day;
+    } else {
+      dayToString = day.toString();
+    }
+
+    if (month < 10) {
+      monthToString = '0' + month;
+    } else {
+      monthToString = month.toString();
+    }
+
+    list[i].dt_txt =
+      year +
+      '-' +
+      monthToString +
+      '-' +
+      dayToString +
+      ' ' +
+      hourToString +
+      ':' +
+      minToString +
+      ':00';
+
+    console.log(list[i].dt_txt);
+  }
+  console.log('nuova lista ' + list[0]);
+
+  return list;
+}
+
+function countDaysInMonth(month) {
+  let daysInMonth = 31;
+  if (month === 4 || month === 6 || month === 9 || month === 11) {
+    daysInMonth = 30;
+  }
+  if (month === 2) {
+    if (year % 4 === 0) {
+      daysInMonth = 29;
+    } else {
+      daysInMonth = 28;
+    }
+  }
+  return daysInMonth;
 }
