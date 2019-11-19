@@ -1,4 +1,4 @@
 # meteo-js
-Sito web per il meteo costruito con Javascript
+Sito web che permette di consultare le previsioni del meteo di una determinata città o tramite geolocalizzazione.
 
-Progetto di Paola Franzini per Start2impact
+Progetto Javascript Start2Impact
