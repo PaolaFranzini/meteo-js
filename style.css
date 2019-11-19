@@ -53,7 +53,8 @@ html {
 }
 
 body {
-  height: 100%;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -180,9 +181,9 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   cursor: pointer;
 }
 
-#location {
+#location-button {
   display: block;
-  margin: 20px auto 0;
+  margin: 30px auto 0;
   padding: 10px 20px;
   border-radius: 20px;
   -webkit-box-shadow: 0 10px 6px -6px rgba(0, 0, 0, 0.3);
@@ -201,12 +202,17 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   background-color: var(--light-clr);
 }
 
-#location:hover {
+#location-button:hover {
   background-color: var(--light-clr);
   color: var(--dark-clr);
 }
 
+#location-error,
 #search-error {
+  font-size: 0.8rem;
+  background-color: var(--light-clr);
+  border: 3px solid red;
+  padding: 10px;
   margin-top: 40px;
 }
 

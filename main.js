@@ -9,7 +9,7 @@ let introText = document.querySelector('#intro-text');
 let searchText = document.querySelector('#search-text');
 let searchField = document.querySelector('#search-field');
 let searchButton = document.querySelector('#search-button');
-let locationButton = document.querySelector('#location');
+let locationButton = document.querySelector('#location-button');
 let searchContainer = document.querySelector('#search-container');
 let cityName = document.querySelector('#city-name');
 let country = document.querySelector('#country');
@@ -47,28 +47,44 @@ function searchLocation() {
 
 function successLocation(pos) {
   var crd = pos.coords;
-
-  console.log('Your current position is:');
-  console.log(`Latitude : ${crd.latitude}`);
-  console.log(`Longitude: ${crd.longitude}`);
-
   let stringLocation = 'lat=' + crd.latitude + '&&lon=' + crd.longitude;
 
   searchWeather(stringLocation);
 }
 
 function errorLocation(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
+  let paraToDelete = document.querySelector('#search-error');
+  if (paraToDelete) {
+    searchContainer.removeChild(paraToDelete);
+  }
+
+  paraToDelete = document.querySelector('#location-error');
+  if (paraToDelete) {
+    searchContainer.removeChild(paraToDelete);
+  }
+
+  let errorLocalization = document.createElement('p');
+  errorLocalization.setAttribute('id', 'location-error');
+
+  searchContainer.appendChild(errorLocalization);
+  let myError = document.createTextNode(
+    "Non trovo la tua posizione. Controlla di aver consentito al browser l'accesso alla localizzazione."
+  );
+  errorLocalization.appendChild(myError);
 }
 
 function searchWeather(stringToSearch) {
   searchButton.blur();
+  let paraToDelete = document.querySelector('#location-error');
+  if (paraToDelete) {
+    searchContainer.removeChild(paraToDelete);
+  }
   let url =
     'https://api.openweathermap.org/data/2.5/forecast?' +
     stringToSearch +
     '&lang=it&units=metric&APPID=' +
     myApiKey;
-  console.log(url);
+
   fetch(url)
     .then(result => {
       return result.json();
@@ -86,14 +102,17 @@ function searchWeather(stringToSearch) {
 
       let notFound = document.createElement('p');
       searchErrorContainer.appendChild(notFound);
-      let string = 'Non ho trovato la città ' + stringToSearch.slice(2);
+      let string =
+        'Non ho trovato la città "' +
+        stringToSearch.slice(2).toUpperCase() +
+        '"';
       let myNotFound = document.createTextNode(string);
       notFound.appendChild(myNotFound);
 
       let checkSpelling = document.createElement('p');
       searchErrorContainer.appendChild(checkSpelling);
       let myCheck = document.createTextNode(
-        'Per favore, controlla di aver scritto correttamente e fai una nuova ricerca'
+        'Per favore, controlla di aver scritto correttamente ed esegui una nuova ricerca.'
       );
       checkSpelling.appendChild(myCheck);
 
@@ -109,7 +128,7 @@ function initializeAll(resultFromServer) {
   searchText.textContent = "Inserisci il nome di un'altra città:";
   mainTitle.style.display = 'none';
 
-  console.log(resultFromServer);
+  window.scrollTo(0, 0);
 
   body.classList.add('weather-displayed');
   weatherOnDate = [];
@@ -127,10 +146,8 @@ function initializeAll(resultFromServer) {
 
   displayInfoCity(resultFromServer.city);
   let convertedResults = convertToLocalTime(resultFromServer.list, timezone);
-  console.log(convertedResults);
   displayDays(convertedResults);
   splitWeatherOnDate(convertedResults);
-  console.log(weatherOnDate);
   activateDate();
 }
 
@@ -139,7 +156,6 @@ function displayInfoCity(city) {
   country.textContent = city.country;
 
   timezone = city.timezone;
-  console.log(timezone);
   displayLocalTime();
   clockDisplayed = setInterval(displayLocalTime, 1000);
 }
@@ -209,7 +225,6 @@ function dateToWeekday(stringDate) {
 }
 
 function splitWeatherOnDate(list) {
-  console.log(list);
   let arrayForToday = [];
   for (i = 0; i <= list.length; i++) {
     if (i === list.length) {
@@ -346,7 +361,6 @@ function initializeToday() {
 
 function updateInfoDate() {
   let number = this.childNodes[0].textContent;
-  console.log(number);
   let index = 0;
 
   while (
@@ -476,18 +490,12 @@ function updateInfoDate() {
 }
 
 function convertToLocalTime(list, offset) {
-  console.log(list);
-
   let hToAdd = Math.floor(offset / 3600);
   let mToAdd = Math.floor((offset % 3600) / 60);
-
-  console.log('ore da aggiungere' + hToAdd);
-  console.log(mToAdd);
 
   for (i = 0; i < list.length; i++) {
     let string = list[i].dt_txt;
 
-    console.log(string);
     let year = Number(string.slice(0, 4));
     let month = Number(string.slice(5, 7));
     let day = Number(string.slice(8, 10));
@@ -505,8 +513,6 @@ function convertToLocalTime(list, offset) {
       min += mToAdd;
     }
 
-    console.log(hour + hToAdd);
-
     if (hour + hToAdd < 0) {
       hour += 24 + hToAdd;
       day--;
@@ -519,8 +525,6 @@ function convertToLocalTime(list, offset) {
     }
 
     let numberDays = countDaysInMonth(month);
-
-    console.log(countDaysInMonth(month));
 
     if (day >= numberDays) {
       day %= numberDays;
@@ -581,10 +585,7 @@ function convertToLocalTime(list, offset) {
       ':' +
       minToString +
       ':00';
-
-    console.log(list[i].dt_txt);
   }
-  console.log('nuova lista ' + list[0]);
 
   return list;
 }
