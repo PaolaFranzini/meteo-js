@@ -1,9 +1,11 @@
 let myApiKey = '0839ff69e6bf3e71fbc91550342cb460';
 
+
 let daysDisplayed = [];
 let weatherOnDate = [];
 
 let body = document.querySelector('body');
+let loader = document.querySelector('.loader');
 let mainTitle = document.querySelector('#main-title');
 let introText = document.querySelector('#intro-text');
 let searchText = document.querySelector('#search-text');
@@ -74,6 +76,7 @@ function errorLocation(err) {
 }
 
 function searchWeather(stringToSearch) {
+  loader.classList.add('active');
   searchButton.blur();
   let paraToDelete = document.querySelector('#location-error');
   if (paraToDelete) {
@@ -91,6 +94,7 @@ function searchWeather(stringToSearch) {
     })
     .then(result => {
       initializeAll(result);
+      loader.classList.remove('active');
     })
     .catch(() => {
       body.classList.remove('weather-displayed');
@@ -121,6 +125,7 @@ function searchWeather(stringToSearch) {
 
       clearInterval(clockDisplayed);
       localTime.innerHTML = '';
+      loader.classList.remove('active');
     });
 }
 
@@ -321,11 +326,18 @@ function initializeToday() {
 
     let icon = document.createElement('img');
     icon.setAttribute('class', 'icon');
-    icon.src =
-      'http://openweathermap.org/img/wn/' +
-      weatherOnDate[0][i].weather[0].icon +
-      '@2x.png';
+    iconUrl = 'https://openweathermap.org/img/wn/' +
+    weatherOnDate[0][i].weather[0].icon +
+    '@2x.png';
     descriptionContainer.appendChild(icon);
+
+    fetch(iconUrl).then(function(response) {
+      return response.blob();
+    }).then(function(myBlob) {
+      var objectURL = URL.createObjectURL(myBlob);
+      icon.src = objectURL;
+      
+    });
 
     let description = document.createElement('p');
     description.setAttribute('class', 'description');
@@ -451,11 +463,17 @@ function updateInfoDate() {
 
     let icon = document.createElement('img');
     icon.setAttribute('class', 'icon');
-    icon.src =
-      'http://openweathermap.org/img/wn/' +
-      weatherOnDate[index][i].weather[0].icon +
-      '@2x.png';
+    iconUrl = 'https://openweathermap.org/img/wn/' +
+    weatherOnDate[index][i].weather[0].icon +
+    '@2x.png';
     descriptionContainer.appendChild(icon);
+
+    fetch(iconUrl).then(function(response) {
+      return response.blob();
+    }).then(function(myBlob) {
+      var objectURL = URL.createObjectURL(myBlob);
+      icon.src = objectURL;
+    });
 
     let description = document.createElement('p');
     description.setAttribute('class', 'description');
