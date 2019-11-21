@@ -65,7 +65,7 @@ body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  background-image: url('img/bg-clouds.jpg');
+  background-image: url('../img/bg-clouds.jpg');
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
@@ -87,6 +87,46 @@ body.weather-displayed {
 #intro-text p {
   margin-bottom: 10px;
 }
+
+/*============================================================
+LOADER
+==============================================================*/
+.loader {
+  opacity: 0;
+  position: fixed;
+  transition: opacity .4s;
+  pointer-events: none;
+}
+
+.loader.active {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #DDE7E9;
+  margin-left: -15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.loader.active img {
+  width: 100px;
+  animation: sun 3s linear infinite;
+}
+
+@keyframes sun {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+  50% {
+    transform: scale(1.8) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
 /*============================================================
 TYPOGRAPHY
 ==============================================================*/
@@ -202,6 +242,7 @@ INTRO CONTAINER SENZA PREVISIONI METEO
   background-color: var(--light-clr);
 }
 
+#location-button:focus,
 #location-button:hover {
   background-color: var(--light-clr);
   color: var(--dark-clr);
@@ -402,6 +443,7 @@ FORECAST
   background-color: var(--secondary-clr);
   padding: 0 3px;
   margin-bottom: 60px;
+  transition: opacity 0.4s;
 }
 
 .hour-row,
