@@ -1,0 +1,25 @@
+{
+  "name": "my-meteo-website",
+  "version": "1.0.0",
+  "description": "meteo website",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaolaFranzini/meteo-js.git"
+  },
+  "author": "PaolaF",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaolaFranzini/meteo-js/issues"
+  },
+  "homepage": "https://github.com/PaolaFranzini/meteo-js#readme",
+  "devDependencies": {
+    "dotenv-webpack": "^1.7.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
