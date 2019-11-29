@@ -31,3 +31,6 @@ $RECYCLE.BIN/
 
 # api keys
 .env
+bundle.js
+node_modules
+node_modules\dotenv

@@ -1,4 +1,4 @@
-let myApiKey = '0839ff69e6bf3e71fbc91550342cb460';
+let myApiKey = process.env.API_KEY;
 
 
 let daysDisplayed = [];
@@ -543,8 +543,9 @@ function convertToLocalTime(list, offset) {
     }
 
     let numberDays = countDaysInMonth(month);
-
-    if (day >= numberDays) {
+    console.log('numberDays' + numberDays);
+    
+    if (day > numberDays) {
       day %= numberDays;
       month++;
     } else if (day <= 0) {
@@ -558,7 +559,7 @@ function convertToLocalTime(list, offset) {
       }
     }
 
-    if (month >= 12) {
+    if (month > 12) {
       month %= 12;
       year++;
     }
@@ -603,8 +604,10 @@ function convertToLocalTime(list, offset) {
       ':' +
       minToString +
       ':00';
-  }
 
+      console.log('lista' + i + ': ' + list[i].dt_txt);
+  }
+  
   return list;
 }
 
